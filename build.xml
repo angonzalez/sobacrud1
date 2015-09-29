@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+
+<project name="soba" basedir="." default="build">
+    <property file="build.properties"/>
+    <property name="src.dir" value="src/main/java"/>
+    <property name="resources.dir" value="src/main/resources"/>
+    <property name="web.dir" value="src/main/webapp"/>
+	<property name="build.dir" value="build/classes"/>
+    <property name="name" value="soba"/>
+    <property name="deploy.WEB-INF" value="${deploy.path}/${name}/WEB-INF"/>
+    <property name="deploy.classes" value="${deploy.WEB-INF}/classes"/>
+
+    <path id="master-classpath">
+        <fileset dir="${web.dir}/WEB-INF/lib">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${appserver.lib}">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement path="${build.dir}"/>
+    </path>
+
+    <target name="usage">
+        <echo message=""/>
+        <echo message="${name} build file"/>
+        <echo message="-----------------------------------"/>
+        <echo message=""/>
+        <echo message="Available targets are:"/>
+        <echo message=""/>
+        <echo message="clean     --> clean the build"/>
+        <echo message="build     --> build the application"/>
+        <echo message="deploy    --> deploy application as directory"/>
+        <echo message="deploywar --> deploy application as a WAR file"/>
+        <echo message=""/>
+    </target>
+
+	<!-- target to compile and build the project in the project's workspace -->
+    <target name="build" depends="clean" description="compile main source tree java files and copy contents">
+        <mkdir dir="${build.dir}"/>
+        <javac destdir="${build.dir}" source="1.6" target="1.6" debug="true"
+               deprecation="false" optimize="false" failonerror="true">
+            <src path="${src.dir}"/>
+            <classpath refid="master-classpath"/>
+        </javac>
+    	<copy todir="${build.dir}">
+    		<fileset dir="${resources.dir}">
+    			<include name="**/*.properties"/>
+    			<include name="**/*.xml"/>
+    		</fileset>
+    	</copy>
+    </target>
+	
+	<!-- target to create a deployable expanded directory -->
+    <target name="deploy" depends="build" description="deploy application as an expanded dir">
+        <copy todir="${deploy.path}/${name}" preservelastmodified="true">
+            <fileset dir="${web.dir}">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>
+    	<copy todir="${deploy.path}/${name}/WEB-INF/classes">
+    		<fileset dir="${build.dir}">
+    			<include name="**/*.*"/>
+    		</fileset>
+    	</copy>
+    </target>
+	
+	<!-- target to create a deployable war file -->
+    <target name="deploywar" depends="build" description="deploy application as a war file">
+        <war destfile="${name}.war"
+             webxml="${web.dir}/WEB-INF/web.xml">
+            <fileset dir="${web.dir}">
+                <include name="**/*.*"/>
+            </fileset>
+        	<classes dir="${build.dir}" />
+        </war>
+        <copy todir="${deploy.path}" preservelastmodified="true">
+            <fileset dir=".">
+                <include name="*.war"/>
+            </fileset>
+        </copy>
+    </target>
+    
+	<!-- target to clean up all files created by previous tasks -->
+	<target name="clean"  description="delete compiled classes and deployed files">
+		<delete quiet="true" includeemptydirs="true">
+			<fileset dir="${build.dir}" includes="**/*" />
+			<fileset dir="${deploy.path}" includes="**/${name}" />
+			<fileset dir="${deploy.path}" includes="**/${name}.war" />
+		</delete>
+	</target>
+</project>
