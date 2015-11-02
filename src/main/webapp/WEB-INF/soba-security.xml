@@ -51,9 +51,10 @@
 		</authentication-provider>
 	</authentication-manager>
 	 -->
+	 
 	<beans:bean id="springSecurityFilterChain"
 		class="org.springframework.security.web.FilterChainProxy">
-		<filter-chain-map>
+		<filter-chain-map >
 			<filter-chain pattern="/images/**" filters="none" />
 			<filter-chain pattern="/rest*/**"
 				filters="
