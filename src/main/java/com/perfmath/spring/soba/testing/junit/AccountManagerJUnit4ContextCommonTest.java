@@ -25,12 +25,12 @@ public class AccountManagerJUnit4ContextCommonTest extends
 
     @Before
     public void init() {
-        jdbcTemplate.update( "INSERT INTO ACCOUNT (ACCOUNT_ID, NAME, TYPE, DESCRIPTION, STATUS, "
+    	jdbcTemplate.update( "INSERT INTO ACCOUNT (ACCOUNT_ID, NAME, TYPE, DESCRIPTION, STATUS, "
 				+ " BALANCE, OPEN_DATE, CLOSE_DATE, CUSTOMER_ID) "
 				+ "VALUES (?, ?, ?,?, ?, ?, ?, ?, ?)", TEST_ACCOUNT_ID, 
 				"Testing", "Testing", "Spring integration testing",  "0", INITIAL_BALANCE,
 				new Timestamp(System.currentTimeMillis()), null, "585855478");
-		jdbcTemplate.update("UPDATE ACCOUNT SET BALANCE = ? WHERE ACCOUNT_ID = ?", 
+    	jdbcTemplate.update("UPDATE ACCOUNT SET BALANCE = ? WHERE ACCOUNT_ID = ?", 
 				(INITIAL_BALANCE + TEST_AMOUNT), TEST_ACCOUNT_ID);
     }
 

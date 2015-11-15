@@ -5,9 +5,9 @@
 <hibernate-configuration>
 	<session-factory>
 		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-		<property name="connection.url">jdbc:mysql://localhost:3306/soba32</property>
-		<property name="connection.username">soba32admin</property>
-		<property name="connection.password">soba32admin</property>
+		<property name="connection.url">jdbc:mysql://localhost:3306/soba</property>
+		<property name="connection.username">root</property>
+		<property name="connection.password">ag123</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="hibernate.show_sql">true</property>
 		<property name="hibernate.hbm2ddl.auto">update</property>
